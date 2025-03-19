@@ -11,7 +11,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 3. [APIs](#apis)
 4. [High-level Design](#high-level-design)
 5. Data Flow
-6. Deep Dive
+6. [Deep Dive](#deep-dive)
 
 ---
 
@@ -287,6 +287,9 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 # High-level Design
 
+---
+
+# Deep Dive
 
 ## Database
 
