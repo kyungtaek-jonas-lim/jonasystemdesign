@@ -18,7 +18,7 @@
 3. [API](#apis)
 4. [High-level Design](#short-url-system-design-diagram)
 5. Data Flow
-6. Deep Dive
+6. [Deep Dive](#deep-dive)
 
 &nbsp;
 
