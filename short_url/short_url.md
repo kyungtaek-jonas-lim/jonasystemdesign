@@ -2,22 +2,22 @@
 
 &nbsp;
 
-## Short URL System Design Diagram
-![Short URL System Design Diagram](https://raw.githubusercontent.com/kyungtaek-jonas-lim/jonasystemdesign/main//short_url/short_url_diagram.png)
+## System Design Diagram (High Level Design)
+![System Design Diagram](https://raw.githubusercontent.com/kyungtaek-jonas-lim/jonasystemdesign/main/short_url/short_url_diagram.png)
 
 &nbsp;
 
 ## Methods of Shortening URLs
-- [Methods of Shortening URLs](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main//short_url/shorten_url_methods_en.md) ([en](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main//short_url/shorten_url_methods_en.md) / [ko](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main//short_url/shorten_url_methods_ko.md))
+- [Methods of Shortening URLs](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main/short_url/shorten_url_methods_en.md) ([en](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main/short_url/shorten_url_methods_en.md) / [ko](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main/short_url/shorten_url_methods_ko.md))
 
 &nbsp;
 
-## Orders
+## Index
 1. [Requirements](#requirements)
 2. [Core Entities](#core-entities)
 3. [API](#apis)
-4. [High-level Design](#short-url-system-design-diagram)
-5. Data Flow
+4. [High-level Design](#system-design-diagram-high-level-design)
+5. [Data Flow](#system-design-diagram-high-level-design)
 6. [Deep Dive](#deep-dive)
 
 &nbsp;

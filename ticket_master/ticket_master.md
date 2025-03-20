@@ -4,14 +4,23 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-# Orders
+# Index
 
 1. [Requirements](#requirements)
 2. [Core Entities](#core-entities)
 3. [APIs](#apis)
-4. [High-level Design](#high-level-design)
-5. Data Flow
+4. [High-level Design](#system-design-diagram-high-level-design)
+5. [Data Flow](#system-design-diagram-high-level-design)
 6. [Deep Dive](#deep-dive)
+
+---
+
+&nbsp;
+
+## System Design Diagram (High Level Design)
+![System Design Diagram](https://raw.githubusercontent.com/kyungtaek-jonas-lim/jonasystemdesign/main/ticket_master/ticket_master_diagram.png)
+
+&nbsp;
 
 ---
 
@@ -326,7 +335,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 - class_id (FK)
 - currency
 - price
-- status ("available", "reserved", "confirmed", "expired")
+- status ("available", "confirmed", "expired" - not including "reserved")
 - status_update_datetime
 - user_id (FK, nullable)
 - payment_id (FK, nullable)
@@ -372,7 +381,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 ## Redis
 
 ### Reserved Tickets with TTL
-- **key:** `reserved_ticket:ticket_{ticket_id}`
+- **key:** `reserved_ticket:{event_id}:ticket_{ticket_id}`
 - **value:**
     - `user_id`
     - `expire_datetime`
@@ -381,3 +390,10 @@ You are tasked with designing a large-scale online ticketing system similar to T
 ### Available Ticket Count (Not necessary but better performance)
 - **key:** `ticket_count:event_{event_id}`
 - **value:** `{available count}`
+
+### Waiting Queue
+- **key:** `waiting_queue:event_{event_id}`
+- **value:**
+    - `user_id` (Unique identifier of the user in the queue)
+    - `wait_time` (Timestamp when the user entered the queue)
+    - `priority` (Optional, to manage priority users in the queue)
