@@ -4,7 +4,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-# Index
+## Index
 
 1. [Requirements](#requirements)
 2. [Core Entities](#core-entities)
@@ -24,9 +24,9 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-# Requirements
+## Requirements
 
-## Core Requirements:
+### Core Requirements:
 1. High Traffic Handling:
     - The system should support millions of users searching, reserving, and purchasing tickets simultaneously.
 
@@ -49,7 +49,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
     - Implement a queueing system for sold-out events or notify users if tickets become available again.
 
 
-## Additional Considerations:
+### Additional Considerations:
 1. Database Design:
     - Describe how you would model key entities such as events, tickets, seats, users, reservations, and payments.
     - Discuss how you will ensure transaction consistency (e.g., ACID vs. BASE principles)
@@ -72,7 +72,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 ---
 
 
-# Core Entities
+## Core Entities
 - Event
 - Venue
 - Ticket
@@ -83,7 +83,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-# APIs
+## APIs
 
 - Get user information from JWTs in cookies or headers.
 - The tickets are assigned by seat.
@@ -91,7 +91,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-### 1. [GET] /events/types
+#### 1. [GET] /events/types
 - **Request:** 
 - **Response:**
 
@@ -112,7 +112,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-### 2. [GET] /events
+#### 2. [GET] /events
 - **Request:** 
     ```
     ?type={event_type}
@@ -143,7 +143,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-### 3. [GET] /events/:event_id
+#### 3. [GET] /events/:event_id
 - **Request:**
 - **Response:**
 
@@ -170,7 +170,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-### 4. [POST] /events/ticket/reserve
+#### 4. [POST] /events/ticket/reserve
 - **Request:**
 
 ```json
@@ -193,7 +193,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-### 5. [POST] /events/ticket/confirm
+#### 5. [POST] /events/ticket/confirm
 - **Request:**
 
 ```json
@@ -251,7 +251,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-### 6. [POST] /events/ticket/cancel
+#### 6. [POST] /events/ticket/cancel
 - **Request:**
 
 ```json
@@ -294,15 +294,11 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-# High-level Design
+## Deep Dive
 
----
+### Database
 
-# Deep Dive
-
-## Database
-
-### Event
+#### Event
 - event_id (PK)
 - title
 - datetime
@@ -314,12 +310,12 @@ You are tasked with designing a large-scale online ticketing system similar to T
 - image_path (From file storage like S3)
 - create_datetime
 
-### Event Type
+#### Event Type
 - type_id (PK)
 - type
 - create_datetime
 
-### Venue
+#### Venue
 - venue_id (PK)
 - name
 - location
@@ -328,7 +324,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 - phone
 - create_datetime
 
-### Ticket
+#### Ticket
 - ticket_id (PK)
 - event_id (FK)
 - seat
@@ -341,7 +337,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 - payment_id (FK, nullable)
 - create_datetime
 
-### User
+#### User
 - user_id (PK)
 - username
 - email
@@ -349,7 +345,7 @@ You are tasked with designing a large-scale online ticketing system similar to T
 - address
 - create_datetime
 
-### Payment
+#### Payment
 - payment_id (PK)
 - user_id (FK)
 - method
@@ -360,17 +356,17 @@ You are tasked with designing a large-scale online ticketing system similar to T
 - transaction_id (From the payment service)
 - create_datetime
 
-### Performer
+#### Performer
 - performer_id (PK)
 - name (Unique)
 - create_datetime
 
-### Event Performer
+#### Event Performer
 - event_id (PK#1, FK)
 - performer_id (PK#2, FK)
 - create_datetime
 
-### Class
+#### Class
 - class_id (PK)
 - name
 - description
@@ -378,20 +374,20 @@ You are tasked with designing a large-scale online ticketing system similar to T
 
 ---
 
-## Redis
+### Redis
 
-### Reserved Tickets with TTL
+#### Reserved Tickets with TTL
 - **key:** `reserved_ticket:{event_id}:ticket_{ticket_id}`
 - **value:**
     - `user_id`
     - `expire_datetime`
     - `status` ("reserved", "expired")
 
-### Available Ticket Count (Not necessary but better performance)
+#### Available Ticket Count (Not necessary but better performance)
 - **key:** `ticket_count:event_{event_id}`
 - **value:** `{available count}`
 
-### Waiting Queue
+#### Waiting Queue
 - **key:** `waiting_queue:event_{event_id}`
 - **value:**
     - `user_id` (Unique identifier of the user in the queue)
