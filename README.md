@@ -16,3 +16,4 @@
 - [Short URL](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main/short_url/short_url.md)
 - [Ticket Master](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main/ticket_master/ticket_master.md)
 - [Uber](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main/uber/uber.md)
+- [Youtube](https://github.com/kyungtaek-jonas-lim/jonasystemdesign/blob/main/youtube/youtube.md)
