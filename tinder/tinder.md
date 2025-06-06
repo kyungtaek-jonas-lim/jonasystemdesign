@@ -29,6 +29,24 @@ Tinder is a large-scale, location-based social matching platform that connects u
 &nbsp;
 
 ## 1. Requirements
+### Functional Requirements:
+1. Users should be able to log in using their phone number via OTP (One-Time Password).
+2. Users should be able to log in with social accounts (e.g., Google, Apple).
+3. Users should be able to create and update their profile, including name, gender, bio, interests, etc.
+4. Each user should have exactly one profile linked to their account.
+5. Users should be able to receive a stack of nearby profiles based on location, preferences, and swipe history.
+6. Users should be able to swipe left (dislike) or right (like) on other user profiles.
+7. Users should be able to chat in real time with matched users.
+8. Users should be notified of new matches, messages, and system events via push notifications.
+9. Users should be able to share and update their current location to enable proximity-based recommendations.
+
+### Non-functional Requirements:
+1. The system should be able to serve millions of daily active users and scale horizontally under high load.
+2. The system should target API response times under 300ms (95th percentile) for core operations.
+3. Real-time interactions (e.g., chat, swipes, match notifications) should be processed with low latency.
+4. Services should be loosely coupled using event-driven architecture (e.g., Kafka) and independently deployable.
+5. The system should scale to handle a high write throughput, e.g., 10 million users × 100 swipes per day = 1B swipe events/day.
+
 
 &nbsp;
 ---
@@ -39,6 +57,8 @@ Tinder is a large-scale, location-based social matching platform that connects u
 1. Profile
 2. Swipe
 3. Match
+4. User
+5. Message
 
 &nbsp;
 ---
