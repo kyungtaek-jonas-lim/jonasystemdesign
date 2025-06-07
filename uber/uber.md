@@ -123,216 +123,211 @@ These are qualities the system should have:
 #### 1. [POST] /ride/request  
 - **Description:** Insert ride request into the database and push it to Kafka.
 - **Request:**  
-```json
-{
-  "pick_up_location": { "lat": 12.212, "lng": 12.312 },
-  "drop_off_location": { "lat": 12.212, "lng": 13.312 }
-}
-```
-- **Response:**  
-```json
-{
-  "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG", // Generated using ULID with additional entropy
-  "estimation": {
-    "fare": 12000,
-    "currency": "USD"
+  ```json
+  {
+    "pick_up_location": { "lat": 12.212, "lng": 12.312 },
+    "drop_off_location": { "lat": 12.212, "lng": 13.312 }
   }
-}
-```
+  ```
+- **Response:**  
+  ```json
+  {
+    "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG", // Generated using ULID with additional entropy
+    "estimation": {
+      "fare": 12000,
+      "currency": "USD"
+    }
+  }
+  ```
 
 ---
 
 #### 2. [PATCH] /ride/driver/status  
 - **Description:** Set driver availability in Redis (`driver:status:{user_id}`).
 - **Request:**  
-```json
-{
-  "status": "available"
-}
-```
+  ```json
+  {
+    "status": "available"
+  }
+  ```
 - **Response:**  
-```json
-{
-  "status": "available"
-}
-```
+  ```json
+  {
+    "status": "available"
+  }
+  ```
 
 ---
 
 #### 3. [PATCH] /ride/request/confirm  
 - **Description:** If the driver approves the request, update driver availability and ride info in DB.
 - **Request:**  
-```json
-{
-  "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG",
-  "approval": true
-}
-```
+  ```json
+  {
+    "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG",
+    "approval": true
+  }
+  ```
 - **Response:**  
-```json
-{
-  "confirmation_datetime": "2025-03-31T13:49:00.001Z"
-}
-```
+  ```json
+  {
+    "confirmation_datetime": "2025-03-31T13:49:00.001Z"
+  }
+  ```
 
 ---
 
 #### 4. [PATCH] /ride/arrival/pick-up/confirm  
 - **Description:** Driver notifies rider that they have arrived at pickup location. *(Not shown in the diagram.)*
 - **Request:**  
-```json
-{
-  "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG"
-}
-```
+  ```json
+  {
+    "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG"
+  }
+  ```
 - **Response:**  
-```json
-{
-  "success": true
-}
-```
+  ```json
+  {
+    "success": true
+  }
+  ```
 
 ---
 
 #### 5. [PATCH] /ride/on-trip/confirm  
 - **Description:** Driver confirms the rider has boarded and starts the trip. *(Not shown in the diagram.)*
 - **Request:**  
-```json
-{
-  "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG"
-}
-```
+  ```json
+  {
+    "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG"
+  }
+  ```
 - **Response:**  
-```json
-{
-  "departure_datetime": "2025-03-31T13:51:00.001Z"
-}
-```
+  ```json
+  {
+    "departure_datetime": "2025-03-31T13:51:00.001Z"
+  }
+  ```
 
 ---
 
 #### 6. [PATCH] /ride/arrival/drop-off/confirm  
 - **Description:** Driver confirms arrival at drop-off. Updates departure and arrival times.
 - **Request:**  
-```json
-{
-  "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG"
-}
-```
+  ```json
+  {
+    "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG"
+  }
+  ```
 - **Response:**  
-```json
-{
-  "departure_datetime": "2025-03-31T13:51:00.001Z",
-  "arrival_datetime": "2025-03-31T14:01:00.001Z"
-}
-```
+  ```json
+  {
+    "departure_datetime": "2025-03-31T13:51:00.001Z",
+    "arrival_datetime": "2025-03-31T14:01:00.001Z"
+  }
+  ```
 
 ---
 
 #### 7. [GET] /ride/price/surge-price  
 - **Description:** Retrieve surge multiplier based on real-time demand. Used for client-side caching.
 - **Request:**  
-```json
-{
-  "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG"
-}
-```
+  ```
+  ?ride_id=01HV7Y8TP1WAWM0BFGPV5RWFXG
+  ```
 - **Response:**  
-```json
-{
-  "surge_multiplier": 1.5, // multiplier applied to base fare
-  "valid_until": "2025-03-31T13:52:00Z" // client should cache until this time
-}
-```
+  ```json
+  {
+    "surge_multiplier": 1.5, // multiplier applied to base fare
+    "valid_until": "2025-03-31T13:52:00Z" // client should cache until this time
+  }
+  ```
 
 ---
 
 #### 8. [GET] /location/driver/near-by  
 - **Description:** Get nearby available drivers from Redis using geospatial queries.
 - **Request:**  
-```json
-{
-  "standard_location": { "lat": 12.212, "lng": 12.812 }
-}
-```
+  ```
+  ?lat=12.212
+  &lng=12.812
+  ```
 - **Response:**  
-```json
-{
-  "near_by_drivers": [
-    {
-      "id": 4234,
-      "name": "Jonas Lim",
-      "rate": 8.5,
-      "distance": 4,
-      "unit": "miles",
-      "location": { "lat": 12.212, "lng": 12.312 }
-    },
-    {
-      "id": 423332,
-      "name": "Kyungtaek Lim",
-      "rate": 10,
-      "distance": 6,
-      "unit": "miles",
-      "location": { "lat": 12.212, "lng": 12.912 }
-    }
-  ]
-}
-```
+  ```json
+  {
+    "near_by_drivers": [
+      {
+        "id": 4234,
+        "name": "Jonas Lim",
+        "rate": 8.5,
+        "distance": 4,
+        "unit": "miles",
+        "location": { "lat": 12.212, "lng": 12.312 }
+      },
+      {
+        "id": 423332,
+        "name": "Kyungtaek Lim",
+        "rate": 10,
+        "distance": 6,
+        "unit": "miles",
+        "location": { "lat": 12.212, "lng": 12.912 }
+      }
+    ]
+  }
+  ```
 
 ---
 
 #### 9. [PATCH] /location/driver  
 - **Description:** Update driver's current location in Redis.
 - **Request:**  
-```json
-{
-  "lat": 12.212,
-  "lng": 12.812
-}
-```
+  ```json
+  {
+    "lat": 12.212,
+    "lng": 12.812
+  }
+  ```
 - **Response:**  
-```json
-{
-  "success": true
-}
-```
+  ```json
+  {
+    "success": true
+  }
+  ```
 
 ---
 
 #### 10. [GET] /location/ride  
 - **Description:** Retrieve current location of the ride and estimated arrival time.
 - **Request:**  
-```json
-{
-  "ride_id": "01HV7Y8TP1WAWM0BFGPV5RWFXG"
-}
-```
+  ```
+  ?ride_id=01HV7Y8TP1WAWM0BFGPV5RWFXG
+  ```
 - **Response:**  
-```json
-{
-  "location": { "lat": 12.212, "lng": 12.812 },
-  "estimated_arrival_datetime": "2025-03-31T14:01:00.001Z"
-}
-```
+  ```json
+  {
+    "location": { "lat": 12.212, "lng": 12.812 },
+    "estimated_arrival_datetime": "2025-03-31T14:01:00.001Z"
+  }
+  ```
 
 ---
 
 #### 11. [PATCH] /profile/rate  
 - **Description:** Submit a rating and optional comment for a user.
 - **Request:**  
-```json
-{
-  "user_id": "423332",
-  "rate": 10,
-  "comment": "So kind"
-}
-```
+  ```json
+  {
+    "user_id": "423332",
+    "rate": 10,
+    "comment": "So kind"
+  }
+  ```
 - **Response:**  
-```json
-{
-  "success": true
-}
-```
+  ```json
+  {
+    "success": true
+  }
+  ```
 
 
 &nbsp;
