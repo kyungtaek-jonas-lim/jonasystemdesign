@@ -66,7 +66,7 @@ Tinder is a large-scale, location-based social matching platform that connects u
 
 
 ## 3. APIs
-### 1. [POST] `/auth/request-otp`
+#### 1. [POST] `/auth/request-otp`
 - **Description:** Phone number verification request
 - **Request:**
     ```json
@@ -81,7 +81,7 @@ Tinder is a large-scale, location-based social matching platform that connects u
     }
     ```
 
-### 2. [POST] `/auth/login/phone`
+#### 2. [POST] `/auth/login/phone`
 - **Description:** Phone Login(/Sign-Up) (Phone number verification)
 - **Request:**
     ```json
@@ -95,11 +95,11 @@ Tinder is a large-scale, location-based social matching platform that connects u
     {
         "accessToken": "JWT...",
         "refreshToken": "JWT...",
-        "userId": "abc123"
+        "userId": "4f91b58a-3ae3-432c-b0c6-c1f179f2d273"
     }
     ```
 
-3. [POST] `/auth/login/social`
+#### 3. [POST] `/auth/login/social`
 - **Description:** Social Login
 - **Request:**
     ```json
@@ -113,11 +113,11 @@ Tinder is a large-scale, location-based social matching platform that connects u
     {
         "accessToken": "JWT...",
         "refreshToken": "JWT...",
-        "userId": "abc123"
+        "userId": "4f91b58a-3ae3-432c-b0c6-c1f179f2d273"
     }
     ```
 
-4. [POST] `/profiles/me/info`
+#### 4. [POST] `/profiles/me/info`
 - **Description:** Profile Setup
 - **Headers:** Authorization: Bearer <accessToken>
 - **Request:**
@@ -127,7 +127,12 @@ Tinder is a large-scale, location-based social matching platform that connects u
         "birthdate": "2025-01-01",
         "gender": "male",
         "interests": ["exercising", "food"],
-        "bio": "Just a software engineer in LA."
+        "bio": "Just a software engineer in LA.",
+        "minAge": 25,
+        "maxAge": 35,
+        "radius": 20, // How far it can get from the user
+        "showMe": "", // ['male', 'female', 'everyone']
+        "isDiscoverable": false // 	Whether to show this user in others' swipe stacks
     }
     ```
 - **Response:**
@@ -137,7 +142,7 @@ Tinder is a large-scale, location-based social matching platform that connects u
     }
     ```
 
-5. [POST] `/profiles/me/photo`
+#### 5. [POST] `/profiles/me/photo`
 - **Description:** Upload profile photos (When the profile photo upload view appears, or user clicks "Upload photo")
 - **Headers:** Authorization: Bearer <accessToken>
 - **Request:**
@@ -148,7 +153,7 @@ Tinder is a large-scale, location-based social matching platform that connects u
     }
     ```
 
-6. [PUT] `/profiles/me/photo`
+#### 6. [PUT] `/profiles/me/photo`
 - **Description:** Notify the completion of the profile photo upload
 - **Headers:** Authorization: Bearer <accessToken>
 - **Request:**
@@ -159,7 +164,7 @@ Tinder is a large-scale, location-based social matching platform that connects u
     }
     ```
 
-7. [GET] `/profiles/me/info`
+#### 7. [GET] `/profiles/me/info`
 - **Description:** Fetch the user's profile information
 - **Headers:** Authorization: Bearer <accessToken>
 - **Request:**
@@ -174,45 +179,104 @@ Tinder is a large-scale, location-based social matching platform that connects u
     }
     ```
 
-8. [GET] `/profiles/me/photo`
-- **Description:** Fetch the user's profile photo
+#### 8. [GET] `/profiles/me/photos`
+- **Description:** Fetch the user's profile photos
 - **Headers:** Authorization: Bearer <accessToken>
 - **Request:**
 - **Response:**
     ```json
     {
-        "photoUrl": "https://s3.amazonaws.com/..." // s3 presigned url
+        "photoUrls": [
+            {   
+                "index": 1,
+                "photoUrl": "https://s3.amazonaws.com/..." // s3 presigned url
+            },
+            {   
+                "index": 2,
+                "photoUrl": "https://s3.amazonaws.com/..." // s3 presigned url
+            }
+        ]
     }
     ```
 
+#### 9. [GET] `/profiles`
+- **Description:** Fetch profile stacks to swipe (Profiles photos, )
+- **Headers:** Authorization: Bearer <accessToken>
+- **Request:**
+    ```
+    ?lat=33.333
+    &long=33.333
+    ```
+- **Response:**
+    ```json
+    {
+        "profiles": [
+            {
+                "userId": "4f91b58a-3ae3-432c-b0c6-c1f179f2d273",
+                "name": "Jonas",
+                "birthdate": "2025-01-01",
+                "gender": "male",
+                "interests": ["exercising", "food"],
+                "bio": "Just a software engineer in LA."
+            }
+        ]
+    }
+    ```
+
+#### 10. [GET] `/profiles/{userId}/photos`
+- **Description:** Fetch other users' profile photos
+- **Headers:** Authorization: Bearer <accessToken>
+- **Request:**
+- **Response:**
+    ```json
+    {
+        "photoUrls": [
+            {   
+                "index": 1,
+                "photoUrl": "https://s3.amazonaws.com/..." // s3 presigned url
+            },
+            {   
+                "index": 2,
+                "photoUrl": "https://s3.amazonaws.com/..." // s3 presigned url
+            }
+        ]
+    }
+    ```
 
 &nbsp;
 ---
 &nbsp;
 
 ## Database
-### users
+#### users
 - user_id (PK)
 - auth_provider // ['PHONE', 'GOOGLE', ...]
 - provider_user_id // Phone number or social account ID if it's social login
 - created_at
 
 
-## profiles
+#### profiles
 - *// profile_id // put this as a PK if each user can have more than one profile.*
 - user_id (PK) // Each user has exactly one profile.
 - photo_url // File Storage Path
 - username
 - gender
 - bio
+- minAge
+- maxAge
+- radius
+- showMe // ['male', 'female', 'everyone']
+- is_discoverable // Whether to show this user in others' swipe stacks
+
+---
 
 ## Redis
-### OTP
+#### OTP
 - key: `auth::phone::otp`
 - value: (string) otp
 - ttl: 3 mins
 
-### Profile Photo upload S3 path
+#### Profile Photo upload S3 path
 - key: `upload_temp::user_id`
-- value: (string) {s3_object_key} (e.g., users/abc123/profile_tmp_94234.jpg)
+- value: (string) {s3_object_key} (e.g., users/4f91b58a-3ae3-432c-b0c6-c1f179f2d273/profile_tmp_94234.jpg)
 - ttl: 10 mins
