@@ -72,32 +72,32 @@ Max video size of 256GB
 #### 1. [POST] /video
 - **Description:** Request to upload a video (returns presigned URL)
 - **Request:**  
-```json
-{
-  "title": "My Vacation Vlog",
-  "description": "Trip to Jeju Island"
-}
-```
+  ```json
+  {
+    "title": "My Vacation Vlog",
+    "description": "Trip to Jeju Island"
+  }
+  ```
 - **Response:**  
-```json
-{
-  "videoId": "abc123",
-  "uploadUrl": "https://s3.amazonaws.com/bucket-name/abc123.mp4?X-Amz-Security-Token=..."
-}
-```
+  ```json
+  {
+    "videoId": "abc123",
+    "uploadUrl": "https://s3.amazonaws.com/bucket-name/abc123.mp4?X-Amz-Security-Token=..."
+  }
+  ```
 
 #### 2. [GET] /video/:videoId
 - **Description:** Fetch metadata and streaming info for a video
 - **Request:**  
 - **Response:**
-```json
-{
-  "title": "My Vacation Vlog",
-  "description": "Trip to Jeju Island",
-  "thumbnailUrl": "https://cdn.yourdomain.com/thumbnails/abc123.jpg",
-  "streamUrl": "https://cdn.yourdomain.com/videos/abc123/master.m3u8"
-}
-```
+  ```json
+  {
+    "title": "My Vacation Vlog",
+    "description": "Trip to Jeju Island",
+    "thumbnailUrl": "https://cdn.yourdomain.com/thumbnails/abc123.jpg",
+    "streamUrl": "https://cdn.yourdomain.com/videos/abc123/master.m3u8"
+  }
+  ```
 
 &nbsp;
 ---
