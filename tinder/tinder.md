@@ -1,5 +1,5 @@
 
-# Tinder (**🛠️ In Progress**)
+# Tinder
 Tinder is a large-scale, location-based social matching platform that connects users through profile swiping and mutual interest. The system must support millions of daily active users, real-time matching, geographically-aware recommendations, and secure, scalable media storage.
 
 
@@ -11,7 +11,7 @@ Tinder is a large-scale, location-based social matching platform that connects u
 2. [Core Entities](#2-core-entities)
 3. [APIs](#3-apis)
 4. [High-level Design](#system-design-diagram-high-level-design)
-<!-- 5. [Data Flow](#4-data-flow) -->
+5. [Data Flow](#4-data-flow)
 6. [Deep Dive](#5-deep-dive)
 7. [Additional Info](#6-additional-info)
 <!-- 8. [Reference](#7-reference) -->
@@ -265,6 +265,13 @@ Tinder is a large-scale, location-based social matching platform that connects u
         "chatId": "9e91b58a-4cc4-432c-d0e2-d9f179f2d273"
     }
     ```
+    
+
+&nbsp;
+---
+&nbsp;
+
+## 4. Data Flow
     
 
 &nbsp;
